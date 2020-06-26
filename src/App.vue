@@ -1,17 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <EmblemGenerator :assets="assets"></EmblemGenerator>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import EmblemGenerator from './components/EmblemGenerator.vue';
+import assets from './customAssets';
+import colors from './customColors';
 
 export default {
   name: 'App',
+  data() {
+    return {
+      assets: {
+        defs: assets.defs,
+        bg_defs: assets.bg_defs,
+        color_defs: colors,
+      },
+    };
+  },
   components: {
-    HelloWorld,
+    EmblemGenerator,
   },
 };
 </script>
