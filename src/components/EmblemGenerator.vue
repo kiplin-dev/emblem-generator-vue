@@ -1,88 +1,129 @@
 <template>
   <div>
     <div id="emblem-div"></div>
-    <div id="asset-selection">
-      <div id="options">
-        <input type="checkbox"
-               @click="toggleFlag('FlipBackgroundVertical')"
-               :checked="selectedFlags.FlipBackgroundVertical"
-        > flip background vertical
-        <input type="checkbox"
-               @click="toggleFlag('FlipBackgroundHorizontal')"
-               :checked="selectedFlags.FlipBackgroundHorizontal"
-        > flip background horizontal
-        <input type="checkbox"
-               @click="toggleFlag('FlipForegroundVertical')"
-               :checked="selectedFlags.FlipForegroundVertical"
-        > flip foreground vertical
-        <input type="checkbox"
-               @click="toggleFlag('FlipForegroundHorizontal')"
-               :checked="selectedFlags.FlipForegroundHorizontal"
-        > flip foreground horizontal
+    <div id="options">
+      <div id="flip">
+        <table>
+          <tr>
+            <th></th>
+            <th>{{ flipVerticallyTxt || 'Flip Vertically' }}</th>
+            <th>{{ flipHorizontallyTxt || 'Flip Horizontally' }}</th>
+            <th>{{ randomizeTxt || 'Randomize' }}</th>
+          </tr>
+          <tr>
+            <td>{{ backgroundTxt || 'Background' }}</td>
+            <td>
+              <input type="checkbox"
+                     @click="toggleFlag('FlipBackgroundVertical')"
+                     :checked="selectedFlags.FlipBackgroundVertical"
+              >
+            </td>
+            <td>
+              <input type="checkbox"
+                     @click="toggleFlag('FlipBackgroundHorizontal')"
+                     :checked="selectedFlags.FlipBackgroundHorizontal"
+              >
+            </td>
+            <td>
+              <button @click="randomize('background')">🎲</button>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ foregroundTxt || 'Foreground' }}</td>
+            <td>
+              <input type="checkbox"
+                     @click="toggleFlag('FlipForegroundVertical')"
+                     :checked="selectedFlags.FlipForegroundVertical"
+              >
+            </td>
+            <td>
+              <input type="checkbox"
+                     @click="toggleFlag('FlipForegroundHorizontal')"
+                     :checked="selectedFlags.FlipForegroundHorizontal"
+              >
+            </td>
+            <td>
+              <button @click="randomize('foreground')">🎲</button>
+            </td>
+          </tr>
+        </table>
       </div>
-      <button @click="randomize">Randomize</button>
       <div id="color-list">
         <div id="color-list-buttons">
-          <p v-for="(label, id) in colorDest"
-                  @click="setColorDest(id)"
-                  :key="`color-button-${id}`"
-                  :class="id === selectedColorDest ? 'selected' : ''"
+          <button v-for="(label, id) in colorDest"
+             @click="setColorDest(id)"
+             :key="`color-button-${id}`"
+             :class="id === selectedColorDest ? 'selected' : ''"
           >
             {{ label }}
-          </p>
+          </button>
         </div>
-        <div v-for="(color, id) in colorList"
-             @click="setElement(selectedColorDest, id)"
-             :key="`color-${id}`"
-             :style="{'background-color': color}"
-             class="color-selector"
-        ></div>
-      </div>
-      <div id="emblem-list">
-        <div v-for="(foreground, id) in emblemList"
-             @click="setElement('foreground_id', id)"
-             :key="`emblem-${id}`"
-             class="svg-selector"
-             :class="id === emblem.foreground_id ? 'selected' : ''"
-        >
-          <svg width="256" height="256" >
-            <path v-for="(path, pathId) in foreground.p2"
-                  :key="`emblem-p2-${pathId}`"
-                  :d="path"
-                  :fill="id === emblem.foreground_id ?
-                    getSelectedColor('foreground_primary_color_id') : '#000000'"
-            ></path>
-            <path v-for="(path, pathId) in foreground.p1"
-                  :key="`emblem-p1-${pathId}`"
-                  :d="path"
-                  :fill="id === emblem.foreground_id ?
-                    getSelectedColor('foreground_secondary_color_id') : '#000000'"
-            ></path>
-            <path v-for="(path, pathId) in foreground.pt1"
-                  :key="`emblem-pt1-${pathId}`"
-                  :d="path"
-            ></path>
-            <path v-for="(path, pathId) in foreground.pto2"
-                  :key="`emblem-pto2-${pathId}`"
-                  :d="path"
-            ></path>
-          </svg>
+        <div id="color-list-selector">
+          <div v-for="(color, id) in colorList"
+               @click="setElement(selectedColorDest, id)"
+               :key="`color-${id}`"
+               :style="{'background-color': color}"
+               class="color-selector"
+          ></div>
         </div>
       </div>
+      <button id="randomize" @click="randomize('all')">
+        {{ randomizeTxt || 'Randomize' }} 🎲
+      </button>
+    </div>
+    <div id="asset-selection">
       <div id="background-list">
-        <div v-for="(background, id) in backgroundList"
-             @click="setElement('background_id', id)"
-             :key="`background-${id}`"
-             class="svg-selector"
-             :class="id === emblem.background_id ? 'selected' : ''"
-        >
-          <svg width="256" height="256" >
-            <path
-              :d="background.p"
-              :fill="id === emblem.background_id ?
-                getSelectedColor('background_color_id') : '#000000'"
-            ></path>
-          </svg>
+        <h3>{{ backgroundTxt || "Background" }}</h3>
+        <div id="background-list-items">
+          <div v-for="(background, id) in backgroundList"
+               @click="setElement('background_id', id)"
+               :key="`background-${id}`"
+               class="svg-selector"
+               :class="id === emblem.background_id ? 'selected' : ''"
+          >
+            <svg width="256" height="256" >
+              <path v-for="(path, pathId) in background.p"
+                    :key="`background-path-${pathId}`"
+                    :d="path"
+                    :fill="id === emblem.background_id ?
+                    getSelectedColor('background_color_id') : '#000000'"
+              ></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div id="foreground-list">
+        <h3>{{ foregroundTxt || "Foreground" }}</h3>
+        <div id="foreground-list-items">
+          <div v-for="(foreground, id) in foregroundList"
+               @click="setElement('foreground_id', id)"
+               :key="`foreground-${id}`"
+               class="svg-selector"
+               :class="id === emblem.foreground_id ? 'selected' : ''"
+          >
+            <svg width="256" height="256" >
+              <path v-for="(path, pathId) in foreground.p2"
+                    :key="`foreground-p2-${pathId}`"
+                    :d="path"
+                    :fill="id === emblem.foreground_id ?
+                    getSelectedColor('foreground_primary_color_id') : '#000000'"
+              ></path>
+              <path v-for="(path, pathId) in foreground.p1"
+                    :key="`foreground-p1-${pathId}`"
+                    :d="path"
+                    :fill="id === emblem.foreground_id ?
+                    getSelectedColor('foreground_secondary_color_id') : '#000000'"
+              ></path>
+              <path v-for="(path, pathId) in foreground.pt1"
+                    :key="`foreground-pt1-${pathId}`"
+                    :d="path"
+              ></path>
+              <path v-for="(path, pathId) in foreground.pto2"
+                    :key="`foreground-pto2-${pathId}`"
+                    :d="path"
+              ></path>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -97,21 +138,22 @@ export default {
   name: 'EmblemGenerator',
   props: {
     assets: Object,
+    emblemData: Object,
+    backgroundTxt: String,
+    foregroundTxt: String,
+    primaryColorTxt: String,
+    secondaryColorTxt: String,
+    flipVerticallyTxt: String,
+    flipHorizontallyTxt: String,
+    randomizeTxt: String,
   },
   data() {
     return {
-      emblem: {
-        background_id: '',
-        foreground_id: '',
-        flags: [],
-        background_color_id: 0,
-        foreground_primary_color_id: 0,
-        foreground_secondary_color_id: 0,
-      },
+      // emblem: {},
       colorDest: {
-        background_color_id: 'Background',
-        foreground_primary_color_id: 'Couleur primaire',
-        foreground_secondary_color_id: 'Couleur secondaire',
+        background_color_id: this.backgroundTxt || 'Background',
+        foreground_primary_color_id: this.primaryColorTxt || 'Primary Color',
+        foreground_secondary_color_id: this.secondaryColorTxt || 'Secondary Color',
       },
       selectedColorDest: 'background_color_id',
       selectedFlags: {
@@ -123,7 +165,7 @@ export default {
     };
   },
   computed: {
-    emblemList() {
+    foregroundList() {
       return this.assets.defs;
     },
     backgroundList() {
@@ -131,6 +173,19 @@ export default {
     },
     colorList() {
       return this.assets.color_defs;
+    },
+    emblem() {
+      if (_.isEmpty(this.emblemData)) {
+        return {
+          background_id: 0,
+          foreground_id: 0,
+          flags: [],
+          background_color_id: 0,
+          foreground_primary_color_id: 0,
+          foreground_secondary_color_id: 0,
+        };
+      }
+      return this.emblemData;
     },
   },
   methods: {
@@ -160,23 +215,34 @@ export default {
       this.$set(this.emblem, 'flags', flags);
       emblemGenerator.drawEmblemObj(this.emblem);
     },
-    randomize() {
-      const emblemIds = _.keys(this.assets.defs);
-      const randomEmblemIndex = _.random(0, emblemIds.length - 1);
-
-      const backgroundIds = _.keys(this.assets.bg_defs);
-      const randomBackgroundIndex = _.random(0, backgroundIds.length - 1);
-
-      const colorIds = _.keys(this.assets.color_defs);
-      const randomBackgroundColorIndex = _.random(0, colorIds.length - 1);
-      const randomForegroundPrimaryColorIndex = _.random(0, colorIds.length - 1);
-      const randomForegroundSecondaryColorIndex = _.random(0, colorIds.length - 1);
-
-      _.keys(this.selectedFlags).forEach((flag) => {
-        if (_.random(0, 1) === 1) {
-          this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
-        }
-      });
+    randomize(element) {
+      if (element === 'background') {
+        this.randomizeBackground();
+        _.keys(this.selectedFlags).forEach((flag) => {
+          if (flag === 'FlipBackgroundVertical' || flag === 'FlipBackgroundHorizontal') {
+            if (_.random(0, 1) === 1) {
+              this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+            }
+          }
+        });
+      } else if (element === 'foreground') {
+        this.randomizeForeground();
+        _.keys(this.selectedFlags).forEach((flag) => {
+          if (flag === 'FlipForegroundVertical' || flag === 'FlipForegroundHorizontal') {
+            if (_.random(0, 1) === 1) {
+              this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+            }
+          }
+        });
+      } else if (element === 'all') {
+        this.randomizeBackground();
+        this.randomizeForeground();
+        _.keys(this.selectedFlags).forEach((flag) => {
+          if (_.random(0, 1) === 1) {
+            this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+          }
+        });
+      }
 
       const flags = [];
       _.keys(this.selectedFlags).forEach((flag) => {
@@ -184,25 +250,46 @@ export default {
           flags.push(flag);
         }
       });
-
-      const defaultEmblem = {
-        background_id: backgroundIds[randomBackgroundIndex],
-        foreground_id: emblemIds[randomEmblemIndex],
-        flags,
-        background_color_id: colorIds[randomBackgroundColorIndex],
-        foreground_primary_color_id: colorIds[randomForegroundPrimaryColorIndex],
-        foreground_secondary_color_id: colorIds[randomForegroundSecondaryColorIndex],
-      };
-
-      this.emblem = defaultEmblem;
+      this.$set(this.emblemData, 'flags', flags);
 
       emblemGenerator.drawEmblemObj(this.emblem);
+    },
+    randomizeBackground() {
+      const backgroundIds = _.keys(this.assets.bg_defs);
+      const randomBackgroundIndex = _.random(0, backgroundIds.length - 1);
+      this.$set(this.emblemData, 'background_id', backgroundIds[randomBackgroundIndex]);
+
+      const colorIds = _.keys(this.assets.color_defs);
+      const randomBackgroundColorIndex = _.random(0, colorIds.length - 1);
+      this.$set(this.emblemData, 'background_color_id', colorIds[randomBackgroundColorIndex]);
+    },
+    randomizeForeground() {
+      const foregroundIds = _.keys(this.assets.defs);
+      const randomForegroundIndex = _.random(0, foregroundIds.length - 1);
+      this.$set(this.emblemData, 'foreground_id', foregroundIds[randomForegroundIndex]);
+
+      const colorIds = _.keys(this.assets.color_defs);
+      const randomForegroundPrimaryColorIndex = _.random(0, colorIds.length - 1);
+      const randomForegroundSecondaryColorIndex = _.random(0, colorIds.length - 1);
+      this.$set(this.emblemData, 'foreground_primary_color_id', colorIds[randomForegroundPrimaryColorIndex]);
+      this.$set(this.emblemData, 'foreground_secondary_color_id', colorIds[randomForegroundSecondaryColorIndex]);
     },
   },
   mounted() {
     emblemGenerator.init('emblem-div', 256, this.assets, 'transparent');
 
-    this.randomize();
+    if (_.isEmpty(this.emblemData)) {
+      this.randomize('all');
+    } else {
+      // check flags checkboxes
+      this.emblemData.flags.forEach((flag) => {
+        this.selectedFlags[flag] = true;
+      });
+
+      emblemGenerator.drawEmblemObj(this.emblem);
+    }
+
+    this.$emit('sendEmblemDataToParent', this.emblem);
   },
 };
 </script>
@@ -224,15 +311,68 @@ export default {
     color: #42b983;
   }
 
+  #emblem-div {
+    border: 1px solid silver;
+    margin:auto;
+    width: 256px;
+  }
+
   #asset-selection {
+    align-items: start;
     display: flex;
     justify-content: space-evenly;
+    margin-top: 15px;
+  }
+
+  #background-list, #foreground-list {
+    width: 50%;
+  }
+
+  #background-list-items, #foreground-list-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-height: 250px;
+    overflow: scroll;
   }
 
   #color-list-buttons{
-    p.selected {
-      background-color: wheat;
+    button.selected {
+      font-weight: bold;
+      color: #42b983;
     }
+  }
+
+  #options {
+    display: flex;
+    align-items: center;
+  }
+
+  #flip {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+
+    table, tr, td, th {
+      border: 1px solid silver;
+      padding: 5px;
+      border-spacing : 0;
+      border-collapse : collapse
+    }
+  }
+
+  #color-list {
+    display: flex;
+    flex-direction: column;
+    padding: 5px 0;
+  }
+
+  #color-list-selector {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 100px;
+    overflow: scroll;
+    padding: 0 20px;
   }
 
   .color-selector {
@@ -251,6 +391,24 @@ export default {
 
     svg {
       transform: scale(0.25) translate(-150%, -150%);
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    #options {
+      flex-direction: column;
+    }
+
+    #randomize {
+      margin-top: 10px;
+    }
+
+    #color-list {
+      margin-top: 10px;
+    }
+
+    #color-list-selector {
+      margin-top: 5px;
     }
   }
 </style>
