@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="emblem-displayer-div"></div>
+    <div :id="uniqDivId"></div>
   </div>
 </template>
 
@@ -13,10 +13,23 @@ export default {
   props: {
     assets: Object,
     emblemData: Object,
-    width: Number,
+    width: {
+      type: Number,
+      default: 256,
+    },
+    divId: {
+      type: String,
+      default: '',
+    },
+  },
+  computed: {
+    uniqDivId() {
+      const suffix = this.divId === '' ? _.uniqueId() : this.divId;
+      return `emblem-displayer-${suffix}`;
+    },
   },
   mounted() {
-    emblemDisplayer.init('emblem-displayer-div', this.width || 256, this.assets, 'transparent');
+    emblemDisplayer.init(this.uniqDivId, this.width, this.assets, 'transparent');
 
     if (!_.isEmpty(this.emblemData)) {
       emblemDisplayer.drawEmblemObj(this.emblemData);

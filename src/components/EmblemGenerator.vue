@@ -1,17 +1,22 @@
 <template>
-  <div>
-    <div id="emblem-div"></div>
+  <div id="emblem-generator-div">
+    <div id="emblem-div">
+      <p v-if="generating" id="generating"><LoaderSvg/>{{ generatingTxt }}</p>
+    </div>
     <div id="options">
+      <button id="randomize" @click="randomize('all')">
+        {{ randomizeTxt }} 🎲
+      </button>
       <div id="flip">
         <table>
           <tr>
             <th></th>
-            <th>{{ flipVerticallyTxt || 'Flip Vertically' }}</th>
-            <th>{{ flipHorizontallyTxt || 'Flip Horizontally' }}</th>
-            <th>{{ randomizeTxt || 'Randomize' }}</th>
+            <th>{{ flipVerticallyTxt }}</th>
+            <th>{{ flipHorizontallyTxt }}</th>
+            <th>{{ randomizeTxt }}</th>
           </tr>
           <tr>
-            <td>{{ backgroundTxt || 'Background' }}</td>
+            <td>{{ backgroundTxt }}</td>
             <td>
               <input type="checkbox"
                      @click="toggleFlag('FlipBackgroundVertical')"
@@ -29,7 +34,7 @@
             </td>
           </tr>
           <tr>
-            <td>{{ foregroundTxt || 'Foreground' }}</td>
+            <td>{{ foregroundTxt }}</td>
             <td>
               <input type="checkbox"
                      @click="toggleFlag('FlipForegroundVertical')"
@@ -67,13 +72,10 @@
           ></div>
         </div>
       </div>
-      <button id="randomize" @click="randomize('all')">
-        {{ randomizeTxt || 'Randomize' }} 🎲
-      </button>
     </div>
     <div id="asset-selection">
       <div id="background-list">
-        <h3>{{ backgroundTxt || "Background" }}</h3>
+        <h3>{{ backgroundTxt }}</h3>
         <div id="background-list-items">
           <div v-for="(background, id) in backgroundList"
                @click="setElement('background_id', id)"
@@ -93,7 +95,7 @@
         </div>
       </div>
       <div id="foreground-list">
-        <h3>{{ foregroundTxt || "Foreground" }}</h3>
+        <h3>{{ foregroundTxt }}</h3>
         <div id="foreground-list-items">
           <div v-for="(foreground, id) in foregroundList"
                @click="setElement('foreground_id', id)"
@@ -133,27 +135,33 @@
 <script>
 import emblemGenerator from 'emblem-generator';
 import _ from 'underscore';
+import LoaderSvg from './svg/loader.vue';
 
 export default {
   name: 'EmblemGenerator',
   props: {
     assets: Object,
     emblemData: Object,
-    backgroundTxt: String,
-    foregroundTxt: String,
-    primaryColorTxt: String,
-    secondaryColorTxt: String,
-    flipVerticallyTxt: String,
-    flipHorizontallyTxt: String,
-    randomizeTxt: String,
+    backgroundTxt: { type: String, default: 'Background' },
+    foregroundTxt: { type: String, default: 'Foreground' },
+    primaryColorTxt: { type: String, default: 'Primary Color' },
+    secondaryColorTxt: { type: String, default: 'Secondary Color' },
+    flipVerticallyTxt: { type: String, default: 'Flip Vertically' },
+    flipHorizontallyTxt: { type: String, default: 'Flip Horizontally' },
+    randomizeTxt: { type: String, default: 'Randomize' },
+    generatingTxt: { type: String, default: 'Generating...' },
+    displayGeneratingLoader: { type: Boolean, default: true },
+  },
+  components: {
+    LoaderSvg,
   },
   data() {
     return {
-      // emblem: {},
+      generating: false,
       colorDest: {
-        background_color_id: this.backgroundTxt || 'Background',
-        foreground_primary_color_id: this.primaryColorTxt || 'Primary Color',
-        foreground_secondary_color_id: this.secondaryColorTxt || 'Secondary Color',
+        background_color_id: this.backgroundTxt,
+        foreground_primary_color_id: this.primaryColorTxt,
+        foreground_secondary_color_id: this.secondaryColorTxt,
       },
       selectedColorDest: 'background_color_id',
       selectedFlags: {
@@ -279,7 +287,15 @@ export default {
     emblemGenerator.init('emblem-div', 256, this.assets, 'transparent');
 
     if (_.isEmpty(this.emblemData)) {
-      this.randomize('all');
+      if (this.displayGeneratingLoader) {
+        this.generating = true;
+        setTimeout(() => {
+          this.generating = false;
+          this.randomize('all');
+        }, 2000);
+      } else {
+        this.randomize('all');
+      }
     } else {
       // check flags checkboxes
       this.emblemData.flags.forEach((flag) => {
@@ -288,8 +304,6 @@ export default {
 
       emblemGenerator.drawEmblemObj(this.emblem);
     }
-
-    this.$emit('sendEmblemDataToParent', this.emblem);
   },
 };
 </script>
@@ -311,10 +325,25 @@ export default {
     color: #42b983;
   }
 
+  #emblem-generator-div {
+    text-align: center;
+  }
+
   #emblem-div {
     border: 1px solid silver;
     margin:auto;
     width: 256px;
+    position: relative;
+  }
+
+  #generating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 30%;
+    transform: translateX(-50%);
+    left: 50%;
   }
 
   #asset-selection {

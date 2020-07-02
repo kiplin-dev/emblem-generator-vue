@@ -5,10 +5,9 @@
       <EmblemDisplayer
         :assets="assets"
         :emblemData="emblemData"
-        :width=64
+        :width=256
+        div-id="test"
       ></EmblemDisplayer>
-      <textarea name="test" id="" cols="30" rows="10" v-model="emblemDataTxt">
-      </textarea>
     </div>
     <div v-else>
       <EmblemGenerator
@@ -21,7 +20,6 @@
         flipVerticallyTxt="Retourner verticalement"
         flipHorizontallyTxt="Retourner horizontalement"
         randomizeTxt="Aléatoire"
-        @sendEmblemDataToParent="getDataFromGenerator"
       ></EmblemGenerator>
     </div>
   </div>
@@ -50,15 +48,7 @@ export default {
     EmblemGenerator,
     EmblemDisplayer,
   },
-  computed: {
-    emblemDataTxt() {
-      return JSON.stringify(this.emblemData);
-    },
-  },
   methods: {
-    getDataFromGenerator(data) {
-      this.emblemData = data;
-    },
     toggleEdit() {
       this.edit = !this.edit;
     },
