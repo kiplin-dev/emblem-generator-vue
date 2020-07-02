@@ -9,12 +9,28 @@
     "build-bundle": "vue-cli-service build --target lib --name emblemGenerator src/components/EmblemGenerator.vue",
     "lint": "vue-cli-service lint"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pochwar/emblem-generator-vue.git"
+  },
+  "keywords": [
+    "emblem",
+    "generator",
+    "svg",
+    "vue"
+  ],
   "dependencies": {
     "core-js": "^3.6.5",
     "emblem-generator": "/home/poch/www/perso/emblem-generator",
     "underscore": "^1.10.2",
     "vue": "^2.6.11"
   },
+  "author": "Benoît Ripoche",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pochwar/emblem-generator-vue/issues"
+  },
+  "homepage": "https://github.com/Pochwar/emblem-generator-vue#readme",
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",
     "@vue/cli-plugin-eslint": "~4.4.0",
