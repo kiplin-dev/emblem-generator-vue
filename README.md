@@ -105,7 +105,7 @@ You'll find the generated assets in the `some-output-folder` directory.
 ### EmblemData
 
 EmblemData is an object that contains the options to generate an emblem.
-It contains the IDs of the selected foregrounds, backgrounds, colors and flips.
+It contains the IDs of the selected foregrounds, backgrounds, colors and flip flags.
 
 example:
 ```javascript
@@ -222,3 +222,9 @@ Example:
   divId="customId" // The generated id will be "emblem-displayer-customId"
 />
 ```
+
+### Author
+
+Benoît Ripoche - Kiplin
+
+benoit.ripoche@kiplin.com
