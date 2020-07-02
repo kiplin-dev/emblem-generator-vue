@@ -1,7 +1,7 @@
 {
   "name": "emblem-generator-vue",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "Vue component to generate SVG emblems",
   "main": "index.js",
   "scripts": {
     "serve": "vue-cli-service serve",
