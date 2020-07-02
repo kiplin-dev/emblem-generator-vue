@@ -1,6 +1,6 @@
 # emblem-generator-vue
 
-Vue component with UI for Emblem Generator.
+Vue component with UI for [Emblem Generator](https://github.com/Pochwar/emblem-generator).
 
 ## Installation
 
