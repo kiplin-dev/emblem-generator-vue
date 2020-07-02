@@ -1,6 +1,6 @@
 {
   "name": "emblem-generator-vue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Vue component to generate SVG emblems",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "core-js": "^3.6.5",
-    "emblem-generator": "/home/poch/www/perso/emblem-generator",
+    "emblem-generator": "^1.0.1",
     "underscore": "^1.10.2",
     "vue": "^2.6.11"
   },
