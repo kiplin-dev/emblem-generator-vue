@@ -2,6 +2,10 @@
 
 Vue component with UI for [Emblem Generator](https://github.com/Pochwar/emblem-generator).
 
+## Demo
+
+https://www.pochworld.com/emblem-generator-vue/
+
 ## Installation
 
 - NPM

@@ -1,13 +1,14 @@
 <template>
   <div id="app">
-    <button @click="toggleEdit">{{ edit ? "Save" : "Edit" }}</button>
+    <button @click="toggleEdit">{{ edit ? "Close" : "Edit" }}</button>
     <div v-if="!edit">
       <EmblemDisplayer
         :assets="assets"
         :emblemData="emblemData"
         :width=256
-        div-id="test"
+        div-id="demo"
       ></EmblemDisplayer>
+      <p v-if="Object.keys(emblemData).length === 0">Click "Edit" to generate a new Emblem!</p>
     </div>
     <div v-else>
       <EmblemGenerator
@@ -64,5 +65,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+#emblem-displayer-demo svg {
+  border: 1px solid silver;
 }
 </style>
