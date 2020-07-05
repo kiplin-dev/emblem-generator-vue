@@ -30,7 +30,6 @@
 import EmblemGenerator from './components/EmblemGenerator.vue';
 import EmblemDisplayer from './components/EmblemDisplayer.vue';
 import assets from './customAssets';
-import colors from './customColors';
 
 export default {
   name: 'App',
@@ -40,7 +39,6 @@ export default {
       assets: {
         defs: assets.defs,
         bg_defs: assets.bg_defs,
-        color_defs: colors,
       },
       emblemData: {},
     };

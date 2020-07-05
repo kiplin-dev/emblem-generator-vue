@@ -53,8 +53,8 @@
           </tr>
         </table>
       </div>
-      <div id="color-list">
-        <div id="color-list-buttons">
+      <div id="color">
+        <div id="color-buttons">
           <button v-for="(label, id) in colorDest"
              @click="setColorDest(id)"
              :key="`color-button-${id}`"
@@ -63,13 +63,13 @@
             {{ label }}
           </button>
         </div>
-        <div id="color-list-selector">
-          <div v-for="(color, id) in colorList"
-               @click="setElement(selectedColorDest, id)"
-               :key="`color-${id}`"
-               :style="{'background-color': color}"
-               class="color-selector"
-          ></div>
+        <div id="color-selector">
+          <color-picker
+            :model="color"
+            :width="200"
+            :height="200"
+            v-on:colorChange="setColor"
+          />
         </div>
       </div>
     </div>
@@ -88,7 +88,7 @@
                     :key="`background-path-${pathId}`"
                     :d="path"
                     :fill="id === emblem.background_id ?
-                    getSelectedColor('background_color_id') : '#000000'"
+                    emblemData.background_color : '#000000'"
               ></path>
             </svg>
           </div>
@@ -108,13 +108,13 @@
                     :key="`foreground-p2-${pathId}`"
                     :d="path"
                     :fill="id === emblem.foreground_id ?
-                    getSelectedColor('foreground_primary_color_id') : '#000000'"
+                    emblemData.foreground_primary_color : '#000000'"
               ></path>
               <path v-for="(path, pathId) in foreground.p1"
                     :key="`foreground-p1-${pathId}`"
                     :d="path"
                     :fill="id === emblem.foreground_id ?
-                    getSelectedColor('foreground_secondary_color_id') : '#000000'"
+                    emblemData.foreground_secondary_color : '#000000'"
               ></path>
               <path v-for="(path, pathId) in foreground.pt1"
                     :key="`foreground-pt1-${pathId}`"
@@ -133,6 +133,7 @@
 </template>
 
 <script>
+import ColorPicker from 'vue-color-picker-wheel';
 import emblemGenerator from 'emblem-generator';
 import _ from 'underscore';
 import LoaderSvg from './svg/loader.vue';
@@ -153,17 +154,19 @@ export default {
     displayGeneratingLoader: { type: Boolean, default: true },
   },
   components: {
+    ColorPicker,
     LoaderSvg,
   },
   data() {
     return {
       generating: false,
+      color: '#ffffff',
       colorDest: {
-        background_color_id: this.backgroundTxt,
-        foreground_primary_color_id: this.primaryColorTxt,
-        foreground_secondary_color_id: this.secondaryColorTxt,
+        background_color: this.backgroundTxt,
+        foreground_primary_color: this.primaryColorTxt,
+        foreground_secondary_color: this.secondaryColorTxt,
       },
-      selectedColorDest: 'background_color_id',
+      selectedColorDest: 'background_color',
       selectedFlags: {
         FlipBackgroundVertical: false,
         FlipBackgroundHorizontal: false,
@@ -179,33 +182,31 @@ export default {
     backgroundList() {
       return this.assets.bg_defs;
     },
-    colorList() {
-      return this.assets.color_defs;
-    },
     emblem() {
       if (_.isEmpty(this.emblemData)) {
         return {
           background_id: 0,
           foreground_id: 0,
           flags: [],
-          background_color_id: 0,
-          foreground_primary_color_id: 0,
-          foreground_secondary_color_id: 0,
+          background_color: '',
+          foreground_primary_color: '',
+          foreground_secondary_color: '',
         };
       }
       return this.emblemData;
     },
   },
   methods: {
-    setElement(element, id) {
-      this.$set(this.emblem, element, id);
+    setColor(value) {
+      this.setElement(this.selectedColorDest, value);
+    },
+    setElement(element, value) {
+      console.log(element, value);
+      this.$set(this.emblem, element, value);
       emblemGenerator.drawEmblemObj(this.emblem);
     },
     setColorDest(id) {
       this.selectedColorDest = id;
-    },
-    getSelectedColor(item) {
-      return this.assets.color_defs[this.emblem[item]];
     },
     toggleFlag(id) {
       this.$set(this.selectedFlags, id, !this.selectedFlags[id]);
@@ -267,20 +268,23 @@ export default {
       const randomBackgroundIndex = _.random(0, backgroundIds.length - 1);
       this.$set(this.emblemData, 'background_id', backgroundIds[randomBackgroundIndex]);
 
-      const colorIds = _.keys(this.assets.color_defs);
-      const randomBackgroundColorIndex = _.random(0, colorIds.length - 1);
-      this.$set(this.emblemData, 'background_color_id', colorIds[randomBackgroundColorIndex]);
+      this.$set(this.emblemData, 'background_color', this.getRandomColor());
     },
     randomizeForeground() {
       const foregroundIds = _.keys(this.assets.defs);
       const randomForegroundIndex = _.random(0, foregroundIds.length - 1);
       this.$set(this.emblemData, 'foreground_id', foregroundIds[randomForegroundIndex]);
 
-      const colorIds = _.keys(this.assets.color_defs);
-      const randomForegroundPrimaryColorIndex = _.random(0, colorIds.length - 1);
-      const randomForegroundSecondaryColorIndex = _.random(0, colorIds.length - 1);
-      this.$set(this.emblemData, 'foreground_primary_color_id', colorIds[randomForegroundPrimaryColorIndex]);
-      this.$set(this.emblemData, 'foreground_secondary_color_id', colorIds[randomForegroundSecondaryColorIndex]);
+      this.$set(this.emblemData, 'foreground_primary_color', this.getRandomColor());
+      this.$set(this.emblemData, 'foreground_secondary_color', this.getRandomColor());
+    },
+    getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i += 1) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
     },
   },
   mounted() {
@@ -333,7 +337,12 @@ export default {
     border: 1px solid silver;
     margin:auto;
     width: 256px;
-    position: relative;
+    /*position: relative;*/
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background-color: #fff;
   }
 
   #generating {
@@ -365,7 +374,7 @@ export default {
     overflow: scroll;
   }
 
-  #color-list-buttons{
+  #color-buttons{
     button.selected {
       font-weight: bold;
       color: #42b983;
@@ -396,17 +405,10 @@ export default {
     padding: 5px 0;
   }
 
-  #color-list-selector {
+  #color-selector {
     display: flex;
-    flex-wrap: wrap;
-    max-height: 100px;
-    overflow: scroll;
+    justify-content: center;
     padding: 0 20px;
-  }
-
-  .color-selector {
-    width: 25px;
-    height: 25px;
   }
 
   .svg-selector {
@@ -432,11 +434,11 @@ export default {
       margin-top: 10px;
     }
 
-    #color-list {
+    #color {
       margin-top: 10px;
     }
 
-    #color-list-selector {
+    #color-selector {
       margin-top: 5px;
     }
   }
