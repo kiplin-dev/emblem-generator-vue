@@ -384,6 +384,7 @@ export default {
   #options {
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
   }
 
   #flip {
