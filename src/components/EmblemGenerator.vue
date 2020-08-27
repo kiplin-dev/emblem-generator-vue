@@ -65,10 +65,10 @@
         </div>
         <div id="color-selector">
           <color-picker
-            :model="color"
+            :startColor="colorPickerStartColor()"
             :width="200"
             :height="200"
-            v-on:colorChange="setColor"
+            @colorChange="setColor"
           />
         </div>
       </div>
@@ -160,7 +160,6 @@ export default {
   data() {
     return {
       generating: false,
-      color: '#ffffff',
       colorDest: {
         background_color: this.backgroundTxt,
         foreground_primary_color: this.primaryColorTxt,
@@ -286,6 +285,13 @@ export default {
       }
       return color;
     },
+    colorPickerStartColor() {
+      if (this.emblem.background_color === '') {
+        // default color
+        return '#ff0000';
+      }
+      return this.emblem.background_color;
+    },
   },
   mounted() {
     emblemGenerator.init('emblem-div', 256, this.assets, 'transparent');
@@ -306,6 +312,7 @@ export default {
         this.selectedFlags[flag] = true;
       });
 
+      // Draw emblem
       emblemGenerator.drawEmblemObj(this.emblem);
     }
   },
