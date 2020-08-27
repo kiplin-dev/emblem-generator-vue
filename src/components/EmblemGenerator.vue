@@ -200,7 +200,6 @@ export default {
       this.setElement(this.selectedColorDest, value);
     },
     setElement(element, value) {
-      console.log(element, value);
       this.$set(this.emblem, element, value);
       emblemGenerator.drawEmblemObj(this.emblem);
     },
