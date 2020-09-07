@@ -4,10 +4,16 @@
       <p v-if="generating" id="generating"><LoaderSvg/>{{ generatingTxt }}</p>
     </div>
     <div id="options">
-      <button id="randomize" @click="randomize('all')">
+      <button
+        @click="randomize('all')"
+        id="randomize"
+      >
         {{ randomizeTxt }} 🎲
       </button>
-      <div id="flip">
+      <div
+        v-if="displayFlip"
+        id="flip"
+      >
         <table>
           <tr>
             <th></th>
@@ -15,7 +21,7 @@
             <th>{{ flipHorizontallyTxt }}</th>
             <th>{{ randomizeTxt }}</th>
           </tr>
-          <tr>
+          <tr v-if="displayBackground">
             <td>{{ backgroundTxt }}</td>
             <td>
               <input type="checkbox"
@@ -53,12 +59,27 @@
           </tr>
         </table>
       </div>
+      <div v-else>
+        <button
+          v-if="displayBackground"
+          @click="randomize('background')"
+        >
+          {{ randomizeTxt }} {{ backgroundTxt }} 🎲
+        </button>
+        <button
+            v-if="displayBackground"
+          @click="randomize('foreground')"
+        >
+          {{ randomizeTxt }} {{ foregroundTxt }} 🎲
+        </button>
+      </div>
       <div id="color">
         <div id="color-buttons">
-          <button v-for="(label, id) in colorDest"
-             @click="setColorDest(id)"
-             :key="`color-button-${id}`"
-             :class="id === selectedColorDest ? 'selected' : ''"
+          <button
+            v-for="(label, id) in colorDest"
+            @click="setColorDest(id)"
+            :key="`color-button-${id}`"
+            :class="id === selectedColorDest ? 'selected' : ''"
           >
             {{ label }}
           </button>
@@ -74,7 +95,9 @@
       </div>
     </div>
     <div id="asset-selection">
-      <div id="background-list">
+      <div
+        v-if="displayBackground"
+        id="background-list">
         <h3>{{ backgroundTxt }}</h3>
         <div id="background-list-items">
           <div v-for="(background, id) in backgroundList"
@@ -152,6 +175,8 @@ export default {
     randomizeTxt: { type: String, default: 'Randomize' },
     generatingTxt: { type: String, default: 'Generating...' },
     displayGeneratingLoader: { type: Boolean, default: true },
+    displayFlip: { type: Boolean, default: true },
+    displayBackground: { type: Boolean, default: true },
   },
   components: {
     ColorPicker,
@@ -225,30 +250,36 @@ export default {
     randomize(element) {
       if (element === 'background') {
         this.randomizeBackground();
-        _.keys(this.selectedFlags).forEach((flag) => {
-          if (flag === 'FlipBackgroundVertical' || flag === 'FlipBackgroundHorizontal') {
-            if (_.random(0, 1) === 1) {
-              this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+        if (this.displayFlip) {
+          _.keys(this.selectedFlags).forEach((flag) => {
+            if (flag === 'FlipBackgroundVertical' || flag === 'FlipBackgroundHorizontal') {
+              if (_.random(0, 1) === 1) {
+                this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+              }
             }
-          }
-        });
-      } else if (element === 'foreground') {
+          });
+        }
+      } else if (element === 'foreground' || (element === 'all' && !this.displayBackground)) {
         this.randomizeForeground();
-        _.keys(this.selectedFlags).forEach((flag) => {
-          if (flag === 'FlipForegroundVertical' || flag === 'FlipForegroundHorizontal') {
-            if (_.random(0, 1) === 1) {
-              this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+        if (this.displayFlip) {
+          _.keys(this.selectedFlags).forEach((flag) => {
+            if (flag === 'FlipForegroundVertical' || flag === 'FlipForegroundHorizontal') {
+              if (_.random(0, 1) === 1) {
+                this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+              }
             }
-          }
-        });
+          });
+        }
       } else if (element === 'all') {
         this.randomizeBackground();
         this.randomizeForeground();
-        _.keys(this.selectedFlags).forEach((flag) => {
-          if (_.random(0, 1) === 1) {
-            this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
-          }
-        });
+        if (this.displayFlip) {
+          _.keys(this.selectedFlags).forEach((flag) => {
+            if (_.random(0, 1) === 1) {
+              this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+            }
+          });
+        }
       }
 
       const flags = [];
@@ -295,6 +326,11 @@ export default {
   mounted() {
     emblemGenerator.init('emblem-div', 256, this.assets, 'transparent');
 
+    // display background color button
+    if (!this.displayBackground) {
+      this.$delete(this.colorDest, 'background_color');
+    }
+
     if (_.isEmpty(this.emblemData)) {
       if (this.displayGeneratingLoader) {
         this.generating = true;
@@ -310,7 +346,6 @@ export default {
       this.emblemData.flags.forEach((flag) => {
         this.selectedFlags[flag] = true;
       });
-
       // Draw emblem
       emblemGenerator.drawEmblemObj(this.emblem);
     }

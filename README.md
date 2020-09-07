@@ -87,9 +87,6 @@ data() {
 ...
 ```
 
-#### Colors
-
-To use custom colors, just modify `customColors.js` to add / remove some colors, or just create your own file.
 
 #### Foregrounds and Backgrounds
 
@@ -149,6 +146,20 @@ Most of the props are to override the default texts:
 - randomizeTxt
 - generatingTxt
 
+| Option | Type | Default value | Description |
+| ------ | ---- | ------------- | ----------- |
+| backgroundTxt | String | null | text for the background elements |
+| foregroundTxt | String | null | text for the foreground elements |
+| primaryColorTxt | String | null |  |
+| secondaryColorTxt | String | null |  |
+| flipVerticalTxt | String | null |  |
+| flipHorizontalTxt | String | null |  |
+| randomizeTxt | String | null |  |
+| generatingTxt | String | null |  |
+| :displayFlip | Boolean | true | show flip options |
+| :displayBackground | Boolean | true | show background options |
+| :displayGeneratingLoader | Boolean | true | show loader |
+
 The last option is for the loader when generating a random emblem when an empty `emblemData` object is pass to the EmblemGenerator.
 
 For a better user experience, we add a false 2 seconds loader so that user understand that the emblem he will see is a random generated one.
@@ -168,6 +179,8 @@ Example:
   flipHorizontallyT="My custom text"
   randomizeTxt="My custom text"
   generatingTxt="My custom text"
+  :displayFlip="false"
+  :displayBackground="false"
   :displayGeneratingLoader="false"
 />
 ```
