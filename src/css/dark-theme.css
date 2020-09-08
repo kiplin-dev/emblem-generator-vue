@@ -3,3 +3,11 @@
     background-color: #787878 ;
     color: #fff;
 }
+
+#emblem-generator-div #emblem-div {
+    border-radius: 5px;
+}
+
+#emblem-displayer-demo svg {
+    border-radius: 5px;
+}

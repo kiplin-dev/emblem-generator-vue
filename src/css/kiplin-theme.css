@@ -9,10 +9,10 @@
     border-color: #055864;
 }
 
-#emblem-div {
+#emblem-generator-div #emblem-div {
     border-radius: 5px;
 }
 
-svg {
+#emblem-displayer-demo svg {
     border-radius: 5px;
 }

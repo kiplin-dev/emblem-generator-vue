@@ -2,7 +2,7 @@
   <div id="app">
     <button
       @click="toggleEdit"
-      class="btn emblem-generator-btn-color"
+      class="emblem-generator-btn emblem-generator-btn-color"
     >
       {{ edit ? "Close" : "Edit" }}
     </button>
@@ -77,7 +77,7 @@ export default {
   border: 1px solid silver;
 }
 
-.btn {
+.emblem-generator-btn {
   width: 200px;
   margin-bottom: 10px;
   border-radius: 5px;
