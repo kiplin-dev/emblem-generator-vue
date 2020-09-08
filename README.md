@@ -17,6 +17,13 @@ https://www.pochworld.com/emblem-generator-vue/
 `yarn add emblem-generator-vue`
 
 ## Usage
+
+Import `EmblemGenerator` component from node_modules and one of the following themes:
+  - light-theme.css
+  - dark-theme.css
+
+Or you can create your own custom theme.
+
 ```javascript
 <template>
   <div>
@@ -29,6 +36,7 @@ https://www.pochworld.com/emblem-generator-vue/
 
 <script>
 import { EmblemGenerator } from 'emblem-generator-vue'
+import './node_modules/emblem-generator-vue/css/light-theme.css';
 
 export default {
   name: 'my-component',
@@ -226,8 +234,10 @@ Example:
 />
 ```
 
-### Author
+### Authors
 
 Benoît Ripoche - Kiplin
-
 benoit.ripoche@kiplin.com
+
+Aurélien Ruiz-Minano - Kiplin
+aurelien.ruiz-minano@kiplin.com
