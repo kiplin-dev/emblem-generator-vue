@@ -192,7 +192,7 @@ export default {
         foreground_primary_color: this.primaryColorTxt,
         foreground_secondary_color: this.secondaryColorTxt,
       },
-      selectedColorDest: 'background_color',
+      selectedColorDest: this.useBackground ? 'background_color' : 'foreground_primary_color',
       selectedFlags: {
         FlipBackgroundVertical: false,
         FlipBackgroundHorizontal: false,
