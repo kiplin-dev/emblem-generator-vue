@@ -4,10 +4,17 @@
       <p v-if="generating" id="generating"><LoaderSvg/>{{ generatingTxt }}</p>
     </div>
     <div id="options">
-      <button id="randomize" @click="randomize('all')">
+      <button
+        class="emblem-generator-btn emblem-generator-btn-color"
+        @click="randomize('all')"
+        id="randomize"
+      >
         {{ randomizeTxt }} 🎲
       </button>
-      <div id="flip">
+      <div
+        v-if="displayFlip"
+        id="flip"
+      >
         <table>
           <tr>
             <th></th>
@@ -15,18 +22,18 @@
             <th>{{ flipHorizontallyTxt }}</th>
             <th>{{ randomizeTxt }}</th>
           </tr>
-          <tr>
+          <tr v-if="useBackground">
             <td>{{ backgroundTxt }}</td>
             <td>
               <input type="checkbox"
-                     @click="toggleFlag('FlipBackgroundVertical')"
-                     :checked="selectedFlags.FlipBackgroundVertical"
+                @click="toggleFlag('FlipBackgroundVertical')"
+                :checked="selectedFlags.FlipBackgroundVertical"
               >
             </td>
             <td>
               <input type="checkbox"
-                     @click="toggleFlag('FlipBackgroundHorizontal')"
-                     :checked="selectedFlags.FlipBackgroundHorizontal"
+                @click="toggleFlag('FlipBackgroundHorizontal')"
+                :checked="selectedFlags.FlipBackgroundHorizontal"
               >
             </td>
             <td>
@@ -37,14 +44,14 @@
             <td>{{ foregroundTxt }}</td>
             <td>
               <input type="checkbox"
-                     @click="toggleFlag('FlipForegroundVertical')"
-                     :checked="selectedFlags.FlipForegroundVertical"
+                @click="toggleFlag('FlipForegroundVertical')"
+                :checked="selectedFlags.FlipForegroundVertical"
               >
             </td>
             <td>
               <input type="checkbox"
-                     @click="toggleFlag('FlipForegroundHorizontal')"
-                     :checked="selectedFlags.FlipForegroundHorizontal"
+                @click="toggleFlag('FlipForegroundHorizontal')"
+                :checked="selectedFlags.FlipForegroundHorizontal"
               >
             </td>
             <td>
@@ -53,12 +60,29 @@
           </tr>
         </table>
       </div>
+      <div v-else>
+        <button
+          class="emblem-generator-btn emblem-generator-btn-color"
+          v-if="useBackground"
+          @click="randomize('background')"
+        >
+          {{ randomizeTxt }} {{ backgroundTxt }} 🎲
+        </button>
+        <button
+          class="emblem-generator-btn emblem-generator-btn-color"
+          @click="randomize('foreground')"
+        >
+          {{ randomizeTxt }} {{ foregroundTxt }} 🎲
+        </button>
+      </div>
       <div id="color">
         <div id="color-buttons">
-          <button v-for="(label, id) in colorDest"
-             @click="setColorDest(id)"
-             :key="`color-button-${id}`"
-             :class="id === selectedColorDest ? 'selected' : ''"
+          <button
+            v-for="(label, id) in colorDest"
+            @click="setColorDest(id)"
+            :key="`color-button-${id}`"
+            :class="id === selectedColorDest ? 'selected' : ''"
+            class="emblem-generator-btn emblem-generator-btn-color"
           >
             {{ label }}
           </button>
@@ -74,21 +98,25 @@
       </div>
     </div>
     <div id="asset-selection">
-      <div id="background-list">
+      <div
+        v-if="useBackground"
+        id="background-list">
         <h3>{{ backgroundTxt }}</h3>
         <div id="background-list-items">
-          <div v-for="(background, id) in backgroundList"
-               @click="setElement('background_id', id)"
-               :key="`background-${id}`"
-               class="svg-selector"
-               :class="id === emblem.background_id ? 'selected' : ''"
+          <div
+            v-for="(background, id) in backgroundList"
+            @click="setElement('background_id', id)"
+            :key="`background-${id}`"
+            class="svg-selector"
+            :class="id === emblem.background_id ? 'selected' : ''"
           >
             <svg width="256" height="256" >
-              <path v-for="(path, pathId) in background.p"
-                    :key="`background-path-${pathId}`"
-                    :d="path"
-                    :fill="id === emblem.background_id ?
-                    emblemData.background_color : '#000000'"
+              <path
+                v-for="(path, pathId) in background.p"
+                :key="`background-path-${pathId}`"
+                :d="path"
+                :fill="id === emblem.background_id ?
+                emblemData.background_color : '#000000'"
               ></path>
             </svg>
           </div>
@@ -98,10 +126,10 @@
         <h3>{{ foregroundTxt }}</h3>
         <div id="foreground-list-items">
           <div v-for="(foreground, id) in foregroundList"
-               @click="setElement('foreground_id', id)"
-               :key="`foreground-${id}`"
-               class="svg-selector"
-               :class="id === emblem.foreground_id ? 'selected' : ''"
+              @click="setElement('foreground_id', id)"
+              :key="`foreground-${id}`"
+              class="svg-selector"
+              :class="id === emblem.foreground_id ? 'selected' : ''"
           >
             <svg width="256" height="256" >
               <path v-for="(path, pathId) in foreground.p2"
@@ -152,6 +180,8 @@ export default {
     randomizeTxt: { type: String, default: 'Randomize' },
     generatingTxt: { type: String, default: 'Generating...' },
     displayGeneratingLoader: { type: Boolean, default: true },
+    displayFlip: { type: Boolean, default: true },
+    useBackground: { type: Boolean, default: true },
   },
   components: {
     ColorPicker,
@@ -165,7 +195,7 @@ export default {
         foreground_primary_color: this.primaryColorTxt,
         foreground_secondary_color: this.secondaryColorTxt,
       },
-      selectedColorDest: 'background_color',
+      selectedColorDest: this.useBackground ? 'background_color' : 'foreground_primary_color',
       selectedFlags: {
         FlipBackgroundVertical: false,
         FlipBackgroundHorizontal: false,
@@ -225,30 +255,36 @@ export default {
     randomize(element) {
       if (element === 'background') {
         this.randomizeBackground();
-        _.keys(this.selectedFlags).forEach((flag) => {
-          if (flag === 'FlipBackgroundVertical' || flag === 'FlipBackgroundHorizontal') {
-            if (_.random(0, 1) === 1) {
-              this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+        if (this.displayFlip) {
+          _.keys(this.selectedFlags).forEach((flag) => {
+            if (flag === 'FlipBackgroundVertical' || flag === 'FlipBackgroundHorizontal') {
+              if (_.random(0, 1) === 1) {
+                this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+              }
             }
-          }
-        });
-      } else if (element === 'foreground') {
+          });
+        }
+      } else if (element === 'foreground' || (element === 'all' && !this.useBackground)) {
         this.randomizeForeground();
-        _.keys(this.selectedFlags).forEach((flag) => {
-          if (flag === 'FlipForegroundVertical' || flag === 'FlipForegroundHorizontal') {
-            if (_.random(0, 1) === 1) {
-              this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+        if (this.displayFlip) {
+          _.keys(this.selectedFlags).forEach((flag) => {
+            if (flag === 'FlipForegroundVertical' || flag === 'FlipForegroundHorizontal') {
+              if (_.random(0, 1) === 1) {
+                this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+              }
             }
-          }
-        });
+          });
+        }
       } else if (element === 'all') {
         this.randomizeBackground();
         this.randomizeForeground();
-        _.keys(this.selectedFlags).forEach((flag) => {
-          if (_.random(0, 1) === 1) {
-            this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
-          }
-        });
+        if (this.displayFlip) {
+          _.keys(this.selectedFlags).forEach((flag) => {
+            if (_.random(0, 1) === 1) {
+              this.$set(this.selectedFlags, flag, !this.selectedFlags[flag]);
+            }
+          });
+        }
       }
 
       const flags = [];
@@ -295,6 +331,11 @@ export default {
   mounted() {
     emblemGenerator.init('emblem-div', 256, this.assets, 'transparent');
 
+    // display background color button
+    if (!this.useBackground) {
+      this.$delete(this.colorDest, 'background_color');
+    }
+
     if (_.isEmpty(this.emblemData)) {
       if (this.displayGeneratingLoader) {
         this.generating = true;
@@ -310,7 +351,6 @@ export default {
       this.emblemData.flags.forEach((flag) => {
         this.selectedFlags[flag] = true;
       });
-
       // Draw emblem
       emblemGenerator.drawEmblemObj(this.emblem);
     }
@@ -369,7 +409,7 @@ export default {
   }
 
   #background-list, #foreground-list {
-    width: 50%;
+    width: 100%;
   }
 
   #background-list-items, #foreground-list-items {
@@ -432,6 +472,15 @@ export default {
     }
   }
 
+  .emblem-generator-btn {
+    width: 200px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 8px 18px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
   @media screen and (max-width: 900px) {
     #options {
       flex-direction: column;
@@ -443,6 +492,12 @@ export default {
 
     #color {
       margin-top: 10px;
+    }
+
+    #color-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     #color-selector {

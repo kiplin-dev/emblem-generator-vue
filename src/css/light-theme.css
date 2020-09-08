@@ -1,0 +1,14 @@
+.emblem-generator-btn-color {
+    border: 1px solid #33b5e5;
+    background-color: #33b5e5;
+    color: white;
+}
+
+#emblem-generator-div #emblem-div {
+    border-radius: 5px;
+}
+
+#emblem-displayer-demo svg {
+    border-radius: 5px;
+}
+

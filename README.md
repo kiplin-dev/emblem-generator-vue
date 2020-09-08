@@ -17,6 +17,13 @@ https://www.pochworld.com/emblem-generator-vue/
 `yarn add emblem-generator-vue`
 
 ## Usage
+
+Import `EmblemGenerator` component from node_modules and one of the following themes:
+  - light-theme.css
+  - dark-theme.css
+
+Or you can create your own custom theme.
+
 ```javascript
 <template>
   <div>
@@ -29,6 +36,7 @@ https://www.pochworld.com/emblem-generator-vue/
 
 <script>
 import { EmblemGenerator } from 'emblem-generator-vue'
+import './node_modules/emblem-generator-vue/css/light-theme.css';
 
 export default {
   name: 'my-component',
@@ -87,9 +95,6 @@ data() {
 ...
 ```
 
-#### Colors
-
-To use custom colors, just modify `customColors.js` to add / remove some colors, or just create your own file.
 
 #### Foregrounds and Backgrounds
 
@@ -140,20 +145,20 @@ If you pass an empty object, it will generate a random emblem.
 You can pass some props to EmblemGenerator to customize the usage.
 
 Most of the props are to override the default texts:
-- backgroundTxt
-- foregroundTxt
-- primaryColorTxt
-- secondaryColorTxt
-- flipVerticallyTxt
-- flipHorizontallyTxt
-- randomizeTxt
-- generatingTxt
 
-The last option is for the loader when generating a random emblem when an empty `emblemData` object is pass to the EmblemGenerator.
-
-For a better user experience, we add a false 2 seconds loader so that user understand that the emblem he will see is a random generated one.
-
-To disable this option, just pass `false` to `displayGeneratingLoader` props
+| Props | Type | Default value | Description |
+| ------ | ---- | ------------- | ----------- |
+| backgroundTxt | String | Background | Text for the background. |
+| foregroundTxt | String | Foreground | Text for the foreground. |
+| primaryColorTxt | String | Primary Color | Text for the primary color. |
+| secondaryColorTxt | String | Secondary Color | Text for the secondary color. |
+| flipVerticalTxt | String | Flip Vertically | Text for the flip vertically. |
+| flipHorizontalTxt | String | Flip Horizontally | Text for the flip horizontally. |
+| randomizeTxt | String | Randomize | Text for the randomize. |
+| generatingTxt | String | Generating... | Text for the generating. |
+| :useBackground | Boolean | true | Use background. Set this option to `false` to use only the foreground. |
+| :displayFlip | Boolean | true | Display flip options.  Set this option to `false` to hide them.|
+| :displayGeneratingLoader | Boolean | true | Generates a random emblem when an empty `emblemData` object is pass to the EmblemGenerator. For a better user experience, we add a fake 2 seconds loader so that user understand that the emblem he will see is a random generated one. Set this option to `false` to skip this feature. |
 
 Example:
 ```javascript
@@ -168,6 +173,8 @@ Example:
   flipHorizontallyT="My custom text"
   randomizeTxt="My custom text"
   generatingTxt="My custom text"
+  :useBackground="false"
+  :displayFlip="false"
   :displayGeneratingLoader="false"
 />
 ```
@@ -227,8 +234,10 @@ Example:
 />
 ```
 
-### Author
+### Authors
 
 Benoît Ripoche - Kiplin
-
 benoit.ripoche@kiplin.com
+
+Aurélien Ruiz-Minano - Kiplin
+aurelien.ruiz-minano@kiplin.com

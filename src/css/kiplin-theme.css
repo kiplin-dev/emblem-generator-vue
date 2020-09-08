@@ -1,0 +1,18 @@
+.emblem-generator-btn-color {
+    border: 1px solid #088c9f;
+    background-color: #09A1B7;
+    color: #fff;
+}
+
+.emblem-generator-btn-color:hover {
+    background-color: #077686;
+    border-color: #055864;
+}
+
+#emblem-generator-div #emblem-div {
+    border-radius: 5px;
+}
+
+#emblem-displayer-demo svg {
+    border-radius: 5px;
+}
