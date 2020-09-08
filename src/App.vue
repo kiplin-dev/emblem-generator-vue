@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <button @click="toggleEdit">{{ edit ? "Close" : "Edit" }}</button>
+    <button
+      @click="toggleEdit"
+      class="btn emblem-generator-btn-color"
+    >
+      {{ edit ? "Close" : "Edit" }}
+    </button>
     <div v-if="!edit">
       <EmblemDisplayer
         :assets="assets"
@@ -21,8 +26,8 @@
         flipVerticallyTxt="Retourner verticalement"
         flipHorizontallyTxt="Retourner horizontalement"
         randomizeTxt="Aléatoire"
-        :displayFlip="true"
-        :useBackground="true"
+        :displayFlip="false"
+        :useBackground="false"
       ></EmblemGenerator>
     </div>
   </div>
@@ -32,6 +37,7 @@
 import EmblemGenerator from './components/EmblemGenerator.vue';
 import EmblemDisplayer from './components/EmblemDisplayer.vue';
 import assets from './customAssets';
+import './css/kiplin-theme.css';
 
 export default {
   name: 'App',
@@ -69,5 +75,14 @@ export default {
 
 #emblem-displayer-demo svg {
   border: 1px solid silver;
+}
+
+.btn {
+  width: 200px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  padding: 8px 18px;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>

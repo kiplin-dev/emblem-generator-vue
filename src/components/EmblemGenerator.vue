@@ -5,6 +5,7 @@
     </div>
     <div id="options">
       <button
+      class="btn emblem-generator-btn-color"
         @click="randomize('all')"
         id="randomize"
       >
@@ -25,14 +26,14 @@
             <td>{{ backgroundTxt }}</td>
             <td>
               <input type="checkbox"
-                     @click="toggleFlag('FlipBackgroundVertical')"
-                     :checked="selectedFlags.FlipBackgroundVertical"
+                    @click="toggleFlag('FlipBackgroundVertical')"
+                    :checked="selectedFlags.FlipBackgroundVertical"
               >
             </td>
             <td>
               <input type="checkbox"
-                     @click="toggleFlag('FlipBackgroundHorizontal')"
-                     :checked="selectedFlags.FlipBackgroundHorizontal"
+                    @click="toggleFlag('FlipBackgroundHorizontal')"
+                    :checked="selectedFlags.FlipBackgroundHorizontal"
               >
             </td>
             <td>
@@ -43,14 +44,14 @@
             <td>{{ foregroundTxt }}</td>
             <td>
               <input type="checkbox"
-                     @click="toggleFlag('FlipForegroundVertical')"
-                     :checked="selectedFlags.FlipForegroundVertical"
+                    @click="toggleFlag('FlipForegroundVertical')"
+                    :checked="selectedFlags.FlipForegroundVertical"
               >
             </td>
             <td>
               <input type="checkbox"
-                     @click="toggleFlag('FlipForegroundHorizontal')"
-                     :checked="selectedFlags.FlipForegroundHorizontal"
+                    @click="toggleFlag('FlipForegroundHorizontal')"
+                    :checked="selectedFlags.FlipForegroundHorizontal"
               >
             </td>
             <td>
@@ -80,6 +81,7 @@
             @click="setColorDest(id)"
             :key="`color-button-${id}`"
             :class="id === selectedColorDest ? 'selected' : ''"
+            class="btn emblem-generator-btn-color"
           >
             {{ label }}
           </button>
@@ -101,10 +103,10 @@
         <h3>{{ backgroundTxt }}</h3>
         <div id="background-list-items">
           <div v-for="(background, id) in backgroundList"
-               @click="setElement('background_id', id)"
-               :key="`background-${id}`"
-               class="svg-selector"
-               :class="id === emblem.background_id ? 'selected' : ''"
+              @click="setElement('background_id', id)"
+              :key="`background-${id}`"
+              class="svg-selector"
+              :class="id === emblem.background_id ? 'selected' : ''"
           >
             <svg width="256" height="256" >
               <path v-for="(path, pathId) in background.p"
@@ -121,10 +123,10 @@
         <h3>{{ foregroundTxt }}</h3>
         <div id="foreground-list-items">
           <div v-for="(foreground, id) in foregroundList"
-               @click="setElement('foreground_id', id)"
-               :key="`foreground-${id}`"
-               class="svg-selector"
-               :class="id === emblem.foreground_id ? 'selected' : ''"
+              @click="setElement('foreground_id', id)"
+              :key="`foreground-${id}`"
+              class="svg-selector"
+              :class="id === emblem.foreground_id ? 'selected' : ''"
           >
             <svg width="256" height="256" >
               <path v-for="(path, pathId) in foreground.p2"
@@ -404,7 +406,7 @@ export default {
   }
 
   #background-list, #foreground-list {
-    width: 50%;
+    width: 100%;
   }
 
   #background-list-items, #foreground-list-items {
@@ -464,7 +466,21 @@ export default {
 
     svg {
       transform: scale(0.25) translate(-150%, -150%);
+      border-radius: 5px;
     }
+  }
+
+  #emblem-div {
+    border-radius: 5px;
+  }
+
+  .btn {
+    width: 200px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 8px 18px;
+    font-weight: bold;
+    cursor: pointer;
   }
 
   @media screen and (max-width: 900px) {
@@ -478,6 +494,12 @@ export default {
 
     #color {
       margin-top: 10px;
+    }
+
+    #color-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     #color-selector {
