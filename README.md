@@ -137,34 +137,20 @@ If you pass an empty object, it will generate a random emblem.
 You can pass some props to EmblemGenerator to customize the usage.
 
 Most of the props are to override the default texts:
-- backgroundTxt
-- foregroundTxt
-- primaryColorTxt
-- secondaryColorTxt
-- flipVerticallyTxt
-- flipHorizontallyTxt
-- randomizeTxt
-- generatingTxt
 
-| Option | Type | Default value | Description |
+| Props | Type | Default value | Description |
 | ------ | ---- | ------------- | ----------- |
-| backgroundTxt | String | null | text for the background elements |
-| foregroundTxt | String | null | text for the foreground elements |
-| primaryColorTxt | String | null |  |
-| secondaryColorTxt | String | null |  |
-| flipVerticalTxt | String | null |  |
-| flipHorizontalTxt | String | null |  |
-| randomizeTxt | String | null |  |
-| generatingTxt | String | null |  |
-| :displayFlip | Boolean | true | show flip options |
-| :displayBackground | Boolean | true | show background options |
-| :displayGeneratingLoader | Boolean | true | show loader |
-
-The last option is for the loader when generating a random emblem when an empty `emblemData` object is pass to the EmblemGenerator.
-
-For a better user experience, we add a false 2 seconds loader so that user understand that the emblem he will see is a random generated one.
-
-To disable this option, just pass `false` to `displayGeneratingLoader` props
+| backgroundTxt | String | Background | Text for the background. |
+| foregroundTxt | String | Foreground | Text for the foreground. |
+| primaryColorTxt | String | Primary Color | Text for the primary color. |
+| secondaryColorTxt | String | Secondary Color | Text for the secondary color. |
+| flipVerticalTxt | String | Flip Vertically | Text for the flip vertically. |
+| flipHorizontalTxt | String | Flip Horizontally | Text for the flip horizontally. |
+| randomizeTxt | String | Randomize | Text for the randomize. |
+| generatingTxt | String | Generating... | Text for the generating. |
+| :useBackground | Boolean | true | Use background. Set this option to `false` to use only the foreground. |
+| :displayFlip | Boolean | true | Display flip options.  Set this option to `false` to hide them.|
+| :displayGeneratingLoader | Boolean | true | Generates a random emblem when an empty `emblemData` object is pass to the EmblemGenerator. For a better user experience, we add a fake 2 seconds loader so that user understand that the emblem he will see is a random generated one. Set this option to `false` to skip this feature. |
 
 Example:
 ```javascript
@@ -179,8 +165,8 @@ Example:
   flipHorizontallyT="My custom text"
   randomizeTxt="My custom text"
   generatingTxt="My custom text"
+  :useBackground="false"
   :displayFlip="false"
-  :displayBackground="false"
   :displayGeneratingLoader="false"
 />
 ```

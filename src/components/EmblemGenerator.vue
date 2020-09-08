@@ -21,7 +21,7 @@
             <th>{{ flipHorizontallyTxt }}</th>
             <th>{{ randomizeTxt }}</th>
           </tr>
-          <tr v-if="displayBackground">
+          <tr v-if="useBackground">
             <td>{{ backgroundTxt }}</td>
             <td>
               <input type="checkbox"
@@ -61,13 +61,13 @@
       </div>
       <div v-else>
         <button
-          v-if="displayBackground"
+          v-if="useBackground"
           @click="randomize('background')"
         >
           {{ randomizeTxt }} {{ backgroundTxt }} 🎲
         </button>
         <button
-            v-if="displayBackground"
+            v-if="useBackground"
           @click="randomize('foreground')"
         >
           {{ randomizeTxt }} {{ foregroundTxt }} 🎲
@@ -96,7 +96,7 @@
     </div>
     <div id="asset-selection">
       <div
-        v-if="displayBackground"
+        v-if="useBackground"
         id="background-list">
         <h3>{{ backgroundTxt }}</h3>
         <div id="background-list-items">
@@ -176,7 +176,7 @@ export default {
     generatingTxt: { type: String, default: 'Generating...' },
     displayGeneratingLoader: { type: Boolean, default: true },
     displayFlip: { type: Boolean, default: true },
-    displayBackground: { type: Boolean, default: true },
+    useBackground: { type: Boolean, default: true },
   },
   components: {
     ColorPicker,
@@ -259,7 +259,7 @@ export default {
             }
           });
         }
-      } else if (element === 'foreground' || (element === 'all' && !this.displayBackground)) {
+      } else if (element === 'foreground' || (element === 'all' && !this.useBackground)) {
         this.randomizeForeground();
         if (this.displayFlip) {
           _.keys(this.selectedFlags).forEach((flag) => {
@@ -327,7 +327,7 @@ export default {
     emblemGenerator.init('emblem-div', 256, this.assets, 'transparent');
 
     // display background color button
-    if (!this.displayBackground) {
+    if (!this.useBackground) {
       this.$delete(this.colorDest, 'background_color');
     }
 
