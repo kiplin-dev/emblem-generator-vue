@@ -5,7 +5,7 @@
     </div>
     <div id="options">
       <button
-      class="btn emblem-generator-btn-color"
+        class="emblem-generator-btn emblem-generator-btn-color"
         @click="randomize('all')"
         id="randomize"
       >
@@ -26,14 +26,14 @@
             <td>{{ backgroundTxt }}</td>
             <td>
               <input type="checkbox"
-                    @click="toggleFlag('FlipBackgroundVertical')"
-                    :checked="selectedFlags.FlipBackgroundVertical"
+                @click="toggleFlag('FlipBackgroundVertical')"
+                :checked="selectedFlags.FlipBackgroundVertical"
               >
             </td>
             <td>
               <input type="checkbox"
-                    @click="toggleFlag('FlipBackgroundHorizontal')"
-                    :checked="selectedFlags.FlipBackgroundHorizontal"
+                @click="toggleFlag('FlipBackgroundHorizontal')"
+                :checked="selectedFlags.FlipBackgroundHorizontal"
               >
             </td>
             <td>
@@ -44,14 +44,14 @@
             <td>{{ foregroundTxt }}</td>
             <td>
               <input type="checkbox"
-                    @click="toggleFlag('FlipForegroundVertical')"
-                    :checked="selectedFlags.FlipForegroundVertical"
+                @click="toggleFlag('FlipForegroundVertical')"
+                :checked="selectedFlags.FlipForegroundVertical"
               >
             </td>
             <td>
               <input type="checkbox"
-                    @click="toggleFlag('FlipForegroundHorizontal')"
-                    :checked="selectedFlags.FlipForegroundHorizontal"
+                @click="toggleFlag('FlipForegroundHorizontal')"
+                :checked="selectedFlags.FlipForegroundHorizontal"
               >
             </td>
             <td>
@@ -62,13 +62,14 @@
       </div>
       <div v-else>
         <button
+          class="emblem-generator-btn emblem-generator-btn-color"
           v-if="useBackground"
           @click="randomize('background')"
         >
           {{ randomizeTxt }} {{ backgroundTxt }} 🎲
         </button>
         <button
-            v-if="useBackground"
+          class="emblem-generator-btn emblem-generator-btn-color"
           @click="randomize('foreground')"
         >
           {{ randomizeTxt }} {{ foregroundTxt }} 🎲
@@ -81,7 +82,7 @@
             @click="setColorDest(id)"
             :key="`color-button-${id}`"
             :class="id === selectedColorDest ? 'selected' : ''"
-            class="btn emblem-generator-btn-color"
+            class="emblem-generator-btn emblem-generator-btn-color"
           >
             {{ label }}
           </button>
@@ -102,18 +103,20 @@
         id="background-list">
         <h3>{{ backgroundTxt }}</h3>
         <div id="background-list-items">
-          <div v-for="(background, id) in backgroundList"
-              @click="setElement('background_id', id)"
-              :key="`background-${id}`"
-              class="svg-selector"
-              :class="id === emblem.background_id ? 'selected' : ''"
+          <div
+            v-for="(background, id) in backgroundList"
+            @click="setElement('background_id', id)"
+            :key="`background-${id}`"
+            class="svg-selector"
+            :class="id === emblem.background_id ? 'selected' : ''"
           >
             <svg width="256" height="256" >
-              <path v-for="(path, pathId) in background.p"
-                    :key="`background-path-${pathId}`"
-                    :d="path"
-                    :fill="id === emblem.background_id ?
-                    emblemData.background_color : '#000000'"
+              <path
+                v-for="(path, pathId) in background.p"
+                :key="`background-path-${pathId}`"
+                :d="path"
+                :fill="id === emblem.background_id ?
+                emblemData.background_color : '#000000'"
               ></path>
             </svg>
           </div>
@@ -466,15 +469,10 @@ export default {
 
     svg {
       transform: scale(0.25) translate(-150%, -150%);
-      border-radius: 5px;
     }
   }
 
-  #emblem-div {
-    border-radius: 5px;
-  }
-
-  .btn {
+  .emblem-generator-btn {
     width: 200px;
     margin-bottom: 10px;
     border-radius: 5px;

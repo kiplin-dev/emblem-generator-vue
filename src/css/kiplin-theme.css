@@ -8,3 +8,11 @@
     background-color: #077686;
     border-color: #055864;
 }
+
+#emblem-div {
+    border-radius: 5px;
+}
+
+svg {
+    border-radius: 5px;
+}

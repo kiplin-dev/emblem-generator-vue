@@ -3,3 +3,12 @@
     background-color: #33b5e5;
     color: white;
 }
+
+#emblem-div {
+    border-radius: 5px;
+}
+
+svg {
+    border-radius: 5px;
+}
+
