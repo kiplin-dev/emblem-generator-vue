@@ -36,7 +36,7 @@ Or you can create your own custom theme.
 
 <script>
 import { EmblemGenerator } from 'emblem-generator-vue'
-import './node_modules/emblem-generator-vue/css/light-theme.css';
+import '../node_modules/emblem-generator-vue/src/css/light-theme.css';
 
 export default {
   name: 'my-component',
@@ -59,26 +59,24 @@ export default {
 ```
 
 ### Assets
-Assets are SVGs and colors definitions that will be used by the EmblemGenerator to generate emblems.
+Assets are SVGs definitions that will be used by the EmblemGenerator to generate emblems.
 
 Its a javascript object that looks like that:
 ```javascript
 const assets = {
   defs: {}, // foregrounds
   bg_defs: {}, // backgrounds
-  color_defs: {} // colors
 }
 ```
 
-You can take a look at `src/customAssets.js` and `src/customColors.js` to see how they are defined.
+You can take a look at `src/customAssets.js` to see how they are defined.
 
 To use these default assets, for example, you can do this:
 ```javascript
 <script>
 ...
 
-import assets from './customAssets';
-import colors from './customColors';
+import assets from '../node_modules/emblem-generator-vue/src/customAssets';
 
 ...
 
@@ -87,11 +85,16 @@ data() {
     assets: {
       defs: assets.defs,
       bg_defs: assets.bg_defs,
-      color_defs: colors,
     }   
   }
 }
 
+// Or shorthand syntaxe
+data() {
+  return {
+    assets 
+  }
+}
 ...
 ```
 
@@ -114,7 +117,7 @@ You'll find the generated assets in the `some-output-folder` directory.
 ### EmblemData
 
 EmblemData is an object that contains the options to generate an emblem.
-It contains the IDs of the selected foregrounds, backgrounds, colors and flip flags.
+It contains the IDs of the selected foregrounds and backgrounds, colors definitions and flip flags.
 
 example:
 ```javascript
@@ -127,16 +130,16 @@ data() {
       background_id: 1,
       foreground_id: 2,
       flags: [],
-      background_color_id: 3,
-      foreground_primary_color_id: 4,
-      foreground_secondary_color_id: 5,
+      background_color: '#ff0ff0',
+      foreground_primary_color: 'rgb(0, 125, 75)',
+      foreground_secondary_color: 'hsl(45,100,50)',
     }   
   }
 }
 
 ...
 ```
-The IDs are those defined in the assets files.
+The foreground and background IDs are defined in the assets file.
 
 If you pass an empty object, it will generate a random emblem.
 

@@ -11,7 +11,7 @@
         :assets="assets"
         :emblemData="emblemData"
         :width=256
-        div-id="demo"
+        divId="demo"
       ></EmblemDisplayer>
       <p v-if="Object.keys(emblemData).length === 0">Click "Edit" to generate a new Emblem!</p>
     </div>
@@ -27,7 +27,7 @@
         flipHorizontallyTxt="Retourner horizontalement"
         randomizeTxt="Aléatoire"
         :displayFlip="false"
-        :useBackground="true"
+        :useBackground="false"
       ></EmblemGenerator>
     </div>
   </div>

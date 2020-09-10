@@ -70,6 +70,7 @@
         </button>
         <button
           class="emblem-generator-btn emblem-generator-btn-color"
+          v-if="useBackground"
           @click="randomize('foreground')"
         >
           {{ randomizeTxt }} {{ foregroundTxt }} 🎲
