@@ -26,8 +26,8 @@
         flipVerticallyTxt="Retourner verticalement"
         flipHorizontallyTxt="Retourner horizontalement"
         randomizeTxt="Aléatoire"
-        :displayFlip="false"
-        :useBackground="false"
+        :displayFlip="true"
+        :useBackground="true"
       ></EmblemGenerator>
     </div>
   </div>
