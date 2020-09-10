@@ -322,11 +322,11 @@ export default {
       return color;
     },
     colorPickerStartColor() {
-      if (this.emblem[this.selectedColorDest] === '') {
+      if (this.emblem.background_color === '') {
         // default color
         return '#ff0000';
       }
-      return this.emblem[this.selectedColorDest];
+      return this.emblem.background_color;
     },
   },
   mounted() {
