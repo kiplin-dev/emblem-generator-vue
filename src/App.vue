@@ -10,7 +10,7 @@
       <EmblemDisplayer
         :assets="assets"
         :emblemData="emblemData"
-        :width=256
+        :size=256
         divId="demo"
       ></EmblemDisplayer>
       <p v-if="Object.keys(emblemData).length === 0">Click "Edit" to generate a new Emblem!</p>
@@ -19,6 +19,7 @@
       <EmblemGenerator
         :assets="assets"
         :emblemData="emblemData"
+        :size="256"
         backgroundTxt="Fond"
         foregroundTxt="Logo"
         primaryColorTxt="Couleur primaire"

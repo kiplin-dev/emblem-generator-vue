@@ -5,22 +5,18 @@
 </template>
 
 <script>
-import emblemDisplayer from 'emblem-generator';
+import EmblemDisplayer from 'emblem-generator';
 import _ from 'underscore';
+
+const emblemDisplayer = new EmblemDisplayer();
 
 export default {
   name: 'EmblemDisplayer',
   props: {
-    assets: Object,
-    emblemData: Object,
-    width: {
-      type: Number,
-      default: 256,
-    },
-    divId: {
-      type: String,
-      default: '',
-    },
+    assets: { type: Object, default: () => {} },
+    emblemData: { type: Object, default: () => {} },
+    size: { type: Number, default: 256 },
+    divId: { type: String, default: '' },
   },
   computed: {
     uniqDivId() {
@@ -29,11 +25,19 @@ export default {
     },
   },
   mounted() {
-    emblemDisplayer.init(this.uniqDivId, this.width, this.assets, 'transparent');
+    emblemDisplayer.init(this.uniqDivId, this.size, this.assets, 'transparent');
 
     if (!_.isEmpty(this.emblemData)) {
       emblemDisplayer.drawEmblemObj(this.emblemData);
     }
+  },
+  watch: {
+    emblemData: {
+      deep: true,
+      handler() {
+        emblemDisplayer.drawEmblemObj(this.emblemData);
+      },
+    },
   },
 };
 </script>

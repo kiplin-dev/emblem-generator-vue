@@ -163,15 +163,18 @@
 
 <script>
 import ColorPicker from 'vue-color-picker-wheel';
-import emblemGenerator from 'emblem-generator';
+import EmblemGenerator from 'emblem-generator';
 import _ from 'underscore';
 import LoaderSvg from './svg/loader.vue';
+
+const emblemGenerator = new EmblemGenerator();
 
 export default {
   name: 'EmblemGenerator',
   props: {
-    assets: Object,
-    emblemData: Object,
+    assets: { type: Object, default: () => {} },
+    emblemData: { type: Object, default: () => {} },
+    size: { type: Number, default: 256 },
     backgroundTxt: { type: String, default: 'Background' },
     foregroundTxt: { type: String, default: 'Foreground' },
     primaryColorTxt: { type: String, default: 'Primary Color' },
@@ -188,6 +191,7 @@ export default {
     ColorPicker,
     LoaderSvg,
   },
+  emits: ['update-emblem-data'],
   data() {
     return {
       generating: false,
@@ -232,7 +236,7 @@ export default {
     },
     setElement(element, value) {
       this.$set(this.emblem, element, value);
-      emblemGenerator.drawEmblemObj(this.emblem);
+      this.drawEmblem();
     },
     setColorDest(id) {
       this.selectedColorDest = id;
@@ -251,7 +255,7 @@ export default {
       });
 
       this.$set(this.emblem, 'flags', flags);
-      emblemGenerator.drawEmblemObj(this.emblem);
+      this.drawEmblem();
     },
     randomize(element) {
       if (element === 'background') {
@@ -296,7 +300,7 @@ export default {
       });
       this.$set(this.emblemData, 'flags', flags);
 
-      emblemGenerator.drawEmblemObj(this.emblem);
+      this.drawEmblem();
     },
     randomizeBackground() {
       const backgroundIds = _.keys(this.assets.bg_defs);
@@ -328,6 +332,10 @@ export default {
       }
       return this.emblem[this.selectedColorDest];
     },
+    drawEmblem() {
+      emblemGenerator.drawEmblemObj(this.emblem);
+      this.$emit('update-emblem-data', this.emblem);
+    },
   },
   mounted() {
     emblemGenerator.init('emblem-div', 256, this.assets, 'transparent');
@@ -353,7 +361,7 @@ export default {
         this.selectedFlags[flag] = true;
       });
       // Draw emblem
-      emblemGenerator.drawEmblemObj(this.emblem);
+      this.drawEmblem();
     }
   },
 };

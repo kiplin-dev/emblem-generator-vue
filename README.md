@@ -151,6 +151,7 @@ Most of the props are to override the default texts:
 
 | Props | Type | Default value | Description |
 | ------ | ---- | ------------- | ----------- |
+| size | Integer | 256 | Size of the emblem div. |
 | backgroundTxt | String | Background | Text for the background. |
 | foregroundTxt | String | Foreground | Text for the foreground. |
 | primaryColorTxt | String | Primary Color | Text for the primary color. |
@@ -168,6 +169,7 @@ Example:
 <EmblemGenerator
   :assets="assets"
   :emblemData="emblemData"
+  :size=512
   backgroundTxt="My custom text"
   foregroundTxt="My custom text"
   primaryColorTxt="My custom text"
@@ -180,6 +182,32 @@ Example:
   :displayFlip="false"
   :displayGeneratingLoader="false"
 />
+```
+## Events
+
+The `update-emblem-data` event is triggered by EmblemGenerator when the emblem is updated with the `emblemData` object as payload.
+
+Usage example:
+```javascript
+<EmblemGenerator
+  :assets="assets"
+  :emblemData="emblemData"
+  :size=512
+  @update-emblem-data="update"
+/>
+
+...
+
+<script>
+export default {
+  ...
+  methods: {
+    update(emblemData) {
+      // do stuff
+    }
+  }
+}
+</script>
 ```
 
 ## EmblemDisplayer
@@ -223,7 +251,7 @@ export default {
 </script>
 ```
 
-You can pass a `width` props to define the size of the displayed emblem (the emblem is a square).
+You can pass a `size` props to define the size of the displayed emblem (the emblem is a square).
 
 To be able to display different emblems in the same page, the divs where the emblems are generate must have a different id. To achieve this, a random id is generate for the containing divs. But if you need to have a specific id (for CSS purpose or something else) you can pass a `divId` props.
 
@@ -232,7 +260,7 @@ Example:
 <EmblemDisplayer
   :assets="assets"
   :emblemData="emblemData"
-  :width="512"
+  :size="512"
   divId="customId" // The generated id will be "emblem-displayer-customId"
 />
 ```
