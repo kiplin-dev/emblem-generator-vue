@@ -3261,9 +3261,9 @@ elliptic@^6.5.3:
     minimalistic-crypto-utils "^1.0.0"
 
 emblem-generator@^1.0.1:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/emblem-generator/-/emblem-generator-1.1.4.tgz#ed53f575fb4b5f8ca2d4799c9187e9b2755ef2b2"
-  integrity sha512-rPzSkSnaB4rjdm0ON/m+i5PQ8vj3UFQFBr6IW5lrgCTRGLQOXm5dz6WuSqRJLJ1ZeDZCF1M+34dqeJjq486RjA==
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/emblem-generator/-/emblem-generator-1.1.5.tgz#4f6e3c055b8de658c0385c193be62cec4657188f"
+  integrity sha512-S4vHpJtDtMeNTzxO3nuKLMHJ7yTgGodaLuCV6KDpdwCGLRLBeUIeGBfFtof7BdbQKLAyf5IGyo96cyWlxv4Z7Q==
   dependencies:
     raphael "^2.3.0"
 
