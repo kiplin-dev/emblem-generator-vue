@@ -338,7 +338,7 @@ export default {
     },
   },
   mounted() {
-    emblemGenerator.init('emblem-div', 256, this.assets, 'transparent');
+    emblemGenerator.init('emblem-div', this.size, this.assets, 'transparent');
 
     // display background color button
     if (!this.useBackground) {
@@ -391,8 +391,7 @@ export default {
   #emblem-div {
     border: 1px solid silver;
     margin:auto;
-    width: 256px;
-    /*position: relative;*/
+    display: inline-table;
     position: -webkit-sticky;
     position: sticky;
     top: 0;
